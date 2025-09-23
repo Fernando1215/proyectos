@@ -83,10 +83,16 @@ PAGINA_PRINCIPAL = """
                 return; 
             } 
             try { 
-                const respuesta = await fetch(`/calcular/${operacion}?a=${num1}&b=${num2}`); 
+                const url = window.location.origin + `/calcular/${operacion}?a=${num1}&b=${num2}`;
+                const respuesta = await fetch(url); 
                 const datos = await respuesta.json(); 
-                document.getElementById('resultado').innerHTML =  
-                    `<strong>${num1} ${obtenerSimbolo(operacion)} ${num2} = ${datos.resultado}</strong>`; 
+                if (datos.error) {
+                    document.getElementById('resultado').innerHTML =  
+                        `<span style="color: red;">${datos.error}</span>`;
+                } else {
+                    document.getElementById('resultado').innerHTML =  
+                        `<strong>${num1} ${obtenerSimbolo(operacion)} ${num2} = ${datos.resultado}</strong>`; 
+                }
             } catch (error) { 
                 document.getElementById('resultado').innerHTML =  
                     '<span style="color: red;">Error en el cálculo</span>'; 
